@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 9217717549845635435}
   - component: {fileID: 6342731233962426772}
   - component: {fileID: 1916965850333487561}
-  - component: {fileID: 4368367118302457625}
   - component: {fileID: 4332723973440456542}
+  - component: {fileID: -8106211191445096306}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -91,6 +91,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!136 &1916965850333487561
 CapsuleCollider:
@@ -115,24 +116,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4368367118302457625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 466302320809116427}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b8a9fd47b1e16846b6f483fddb112a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestMvtSurCases
-  caseList: {fileID: 0}
-  caseIncrease: 3
-  tempsMvtJoueur: 1
-  allowInput: 1
-  reverseArrayCheck: 0
-  comparaisonType: 2
 --- !u!54 &4332723973440456542
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,3 +143,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-8106211191445096306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466302320809116427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e31057ef324a04478bb4f7d469b3cdc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.EnhancedTouch.TouchSimulation

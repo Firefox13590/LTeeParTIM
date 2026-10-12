@@ -602,6 +602,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2569,6 +2570,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_0001
       objectReference: {fileID: 0}
+    - target: {fileID: 466302320809116427, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6342731233962426772, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -3276,6 +3281,10 @@ PrefabInstance:
     - target: {fileID: 466302320809116427, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: m_Name
       value: Player_0002
+      objectReference: {fileID: 0}
+    - target: {fileID: 466302320809116427, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6342731233962426772, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -4423,6 +4432,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4967,6 +4977,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -5930,6 +5941,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -6031,6 +6043,10 @@ PrefabInstance:
     - target: {fileID: 466302320809116427, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: m_Name
       value: Player_0003
+      objectReference: {fileID: 0}
+    - target: {fileID: 466302320809116427, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6342731233962426772, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -6396,6 +6412,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -7572,6 +7589,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -8897,6 +8915,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1364414960
 MeshFilter:
@@ -9001,6 +9020,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -9494,14 +9514,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1479194276}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
@@ -9546,7 +9566,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -10062,6 +10082,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -10659,6 +10680,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -10966,6 +10988,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1639441261
 MeshFilter:
@@ -12116,6 +12139,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -13650,9 +13674,6 @@ MonoBehaviour:
   gameSettings: {fileID: 11400000, guid: 6bd18b2706f46d2479b685db9e8254ff, type: 2}
   playerObjects:
   - {fileID: 1381932643}
-  - {fileID: 432213036}
-  - {fileID: 530023426}
-  - {fileID: 1002507204}
   playerPosAjust: {x: 0, y: 1, z: 0}
   gameManager: {fileID: 25559777}
   cardManager: {fileID: 1360395951}
@@ -14291,6 +14312,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

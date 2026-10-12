@@ -1,13 +1,17 @@
 using Lib.Entities;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
 using Random = UnityEngine.Random;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class PlayerControls : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
-    public GameObject[] playerObjects = new GameObject[4];
+    //public GameObject[] playerObjects = new GameObject[4];
+    public GameObject[] playerObjects = new GameObject[1];
     public Vector3 playerPosAjust = Vector3.zero;
     public GameManager gameManager;
     public CardManager cardManager;
@@ -24,10 +28,16 @@ public class PlayerControls : MonoBehaviour
     int movesLeft;
     bool allowMove = false;
     BotControls botControls;
+    InputAction touchAction;
 
     // évènements statiques
     public static event Action OnTurnEnd;
     public static event Action OnTileChoiceEnd;
+
+    private void Awake()
+    {
+        touchAction = InputSystem.actions.FindAction("UI/Click");
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,7 +49,7 @@ public class PlayerControls : MonoBehaviour
         listeCases = GameObject.FindGameObjectsWithTag("Case");
         Array.Sort(listeCases, (a, b) => string.CompareOrdinal(a.name, b.name));
 
-        for(int i = 0; i < playerObjects.Length; i++)
+        for (int i = 0; i < playerObjects.Length; i++)
         {
             gameSettings.Players[i].CurrentPos = testCurrentPos;
             playerObjects[i].transform.position = listeCases[gameSettings.Players[i].CurrentPos].transform.position + playerPosAjust;
@@ -48,6 +58,14 @@ public class PlayerControls : MonoBehaviour
         cardManager.gameObject.SetActive(true);
 
         botControls = GetComponent<BotControls>();
+
+
+
+        Debug.Log(touchAction.ReadValueAsObject());
+        Debug.Log(touchAction.activeValueType);
+
+        Debug.Log(Touchscreen.current.primaryTouch.valueType);
+        Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
     }
 
     private void OnDestroy()
@@ -81,6 +99,8 @@ public class PlayerControls : MonoBehaviour
         {
             ChooseTile();
         }
+
+        //Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
     }
 
 
@@ -126,7 +146,7 @@ public class PlayerControls : MonoBehaviour
                 movesLeft--;
                 //Debug.Log("current moves left: " + movesLeft);
 
-                if(plannedRedirect != Vector3.zero)
+                if (plannedRedirect != Vector3.zero)
                 {
                     targetPos = plannedRedirect;
                     plannedRedirect = Vector3.zero;

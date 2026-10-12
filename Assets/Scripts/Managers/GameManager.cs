@@ -5,6 +5,7 @@ using Lib;
 using TMPro;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,12 +22,13 @@ public class GameManager : MonoBehaviour
 
     // variables publiques statiques
     public static int playerTurn = 0;
-    public static int turnsLeft = 5;
+    public static int turnsLeft = 10;
 
     private void Awake()
     {
         //gameSettings.SetBackDefaultPlayerSettings();
         gameSettings.ResetPlayerGameStats();
+        TouchSimulation.Enable();
     }
 
     private void Start()
