@@ -2,8 +2,6 @@ using Lib.Entities;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.InputSystem.LowLevel;
 using Random = UnityEngine.Random;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
@@ -39,6 +37,9 @@ public class PlayerControls : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+#if !UNITY_EDITOR
+testCurrentPos = 0;
+#endif
         // abonnement aux évènements
         Case.OnTileChoiceStart += StartTileSelection;
         Case.OnTileRedirect += TileRedirect;
@@ -185,24 +186,6 @@ public class PlayerControls : MonoBehaviour
         else
         {
             //Debug.Log("player tile selection");
-            foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
-            {
-                if (Input.GetKeyDown(key))
-                {
-                    if (key == gameSettings.Players[GameManager.playerTurn].Controls.Action)
-                    {
-                        // confirme le choix de case avec le bouton d'action
-                        TileSelected();
-                    }
-                    else
-                    {
-                        // change la sélecton avec les autres boutons
-                        gameManager.ChangeTileSelection();
-                    }
-                }
-            }
-
-
 
             touchInput = Touchscreen.current.primaryTouch.ReadValue();
             if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
@@ -217,7 +200,9 @@ public class PlayerControls : MonoBehaviour
                     if (hit.collider.name.StartsWith("TileChoice"))
                     {
                         gameManager.ChangeTileSelection(hit.collider.gameObject);
-                        TileSelected();
+                        allowTileChoice = false;
+                        Invoke(nameof(TileSelected), 1);
+                        //TileSelected();
                     }
                 }
             }
@@ -265,39 +250,6 @@ public class PlayerControls : MonoBehaviour
         else
         {
             //Debug.Log("player card selection");
-            foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
-            {
-                if (Input.GetKeyDown(key))
-                {
-                    // change la sélection de carte avec les boutons de mouvement
-                    if (key == gameSettings.Players[GameManager.playerTurn].Controls.Up)
-                    {
-                        cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint), true);
-                    }
-                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Down)
-                    {
-                        cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint));
-
-                    }
-                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Right)
-                    {
-                        cardManager.BougerSelecteurCarte(1);
-                    }
-                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Left)
-                    {
-                        cardManager.BougerSelecteurCarte(1, true);
-                    }
-                    else
-                    {
-                        // confrme la sélection avec le bouton d'action
-                        allowInput = false;
-
-                        cardManager.ChoisirCarte();
-                    }
-                }
-            }
-
-
 
             touchInput = Touchscreen.current.primaryTouch.ReadValue();
             //Debug.Log(touchInput);

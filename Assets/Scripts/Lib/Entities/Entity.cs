@@ -1,5 +1,4 @@
 using UnityEngine;
-using Lib.Globals;
 using System;
 
 namespace Lib.Entities
@@ -34,29 +33,14 @@ namespace Lib.Entities
     {
         private int currency = 0;
 
-        public Controls Controls { get; set; }
         public int Currency
         {
             get { return currency; }
             set { currency = value; }
         }
 
-        public Player() : base("Player")
-        {
-            Controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space);
-        }
-        public Player(string name) : base(name)
-        {
-            Controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space);
-        }
-        public Player(Controls controls) : base("Player")
-        {
-            Controls = controls;
-        }
-        public Player(string name, Controls controls) : base(name)
-        {
-            Controls = controls;
-        }
+        public Player() : base("Player") { }
+        public Player(string name) : base(name) { }
     }
 
     /// <summary>

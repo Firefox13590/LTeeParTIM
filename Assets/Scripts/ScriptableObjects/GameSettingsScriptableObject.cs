@@ -1,11 +1,10 @@
 using UnityEngine;
-using Lib.Globals;
 using Lib.Entities;
 
 [CreateAssetMenu(fileName = "GameSettingsScriptableObject", menuName = "Scriptable Objects/GameSettingsScriptableObject")]
 public class GameSettingsScriptableObject : ScriptableObject
 {
-    private Player player1 = new("Player1", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space));
+    private Player player1 = new("Player1");
     private Player player3 = new Bot("Bot1");
     private Player player2 = new Bot("Bot2");
     private Player player4 = new Bot("Bot3");
@@ -25,7 +24,7 @@ public class GameSettingsScriptableObject : ScriptableObject
     /// </summary>
     public void SetBackDefaultPlayerSettings()
     {
-        player1 = new("Player1", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space));
+        player1 = new("Player1");
         player2 = new Bot("Bot1");
         player3 = new Bot("Bot2");
         player4 = new Bot("Bot3");
