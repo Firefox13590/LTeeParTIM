@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
         //gameSettings.SetBackDefaultPlayerSettings();
         gameSettings.ResetPlayerGameStats();
         TouchSimulation.Enable();
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
     private void Start()
@@ -63,7 +64,7 @@ public class GameManager : MonoBehaviour
         tileChoice = options;
         popupTileChoice.SetActive(true);
 
-        for(int i = 0; i < options.Length; i++)
+        for (int i = 0; i < options.Length; i++)
         {
             tileChoiceiIndocators[i].transform.position = options[i].transform.position + new Vector3(0, 10);
             tileChoiceiIndocators[i].SetActive(true);
@@ -93,6 +94,10 @@ public class GameManager : MonoBehaviour
             tileChoiceiIndocators[i].transform.position = tileChoice[i].transform.position + new Vector3(0, 10);
         }
     }
+    public void ChangeTileSelection(GameObject tileChoiceObject)
+    {
+        if (tileChoiceiIndocators[0] != tileChoiceObject) ChangeTileSelection();
+    }
 
     /// <summary>
     /// Met à jour l'ordre du tour des joueurs.
@@ -106,7 +111,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
         HighlightPlayerStatsPanel();
 
-        if(playerTurn == 0)
+        if (playerTurn == 0)
         {
             UpdateGameTurn();
         }
@@ -120,7 +125,7 @@ public class GameManager : MonoBehaviour
         turnsLeft--;
         texteToursRestants.text = "Tours restants: " + turnsLeft;
 
-        if(turnsLeft == 0)
+        if (turnsLeft == 0)
         {
             SceneManager.LoadScene(2);
         }
@@ -131,9 +136,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void HighlightPlayerStatsPanel()
     {
-        for(int i = 0; i < playerStatsPanels.Length; i++)
+        for (int i = 0; i < playerStatsPanels.Length; i++)
         {
-            if(i == playerTurn)
+            if (i == playerTurn)
             {
                 playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 350);
                 playerStatsPanels[i].GetComponentInChildren<Image>().color = playerMaterials[i].color;

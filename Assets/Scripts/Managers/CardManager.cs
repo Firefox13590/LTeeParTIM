@@ -40,7 +40,7 @@ public class CardManager : MonoBehaviour
     /// </summary>
     void RemplirListeCartes()
     {
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             // instanciation
             GameObject instanceCarte = Instantiate(cartePrefab);
@@ -147,6 +147,22 @@ public class CardManager : MonoBehaviour
         glow.GetComponent<RectTransform>().anchoredPosition = listeCartes[glowPos].GetComponent<RectTransform>().anchoredPosition;
         ChoisirCarte();
     }
+    public void ChoisirCarte(Vector2 screenPoint)
+    {
+        //Debug.Log($"screenPoint: {screenPoint}");
+
+        for (int i = 0; i < listeCartes.Count; i++)
+        {
+            if (RectTransformUtility.RectangleContainsScreenPoint(listeCartes[i].GetComponent<RectTransform>(), screenPoint))
+            {
+                //Debug.Log("Point in card #" + i);
+                playerControls.allowInput = false;
+                glowPos = i;
+                ChoisirCarte();
+                break;
+            }
+        }
+    }
 
     /// <summary>
     /// Donne la valeur de déplacement de la carte sélectionnée au joueur.
@@ -155,7 +171,7 @@ public class CardManager : MonoBehaviour
     {
         //Debug.Log(listeCartes[glowPos].GetComponent<Image>().material.name[4]);
         //Debug.Log(Char.GetNumericValue(listeCartes[glowPos].GetComponent<Image>().material.name[4]));
-        playerControls.GetMovesLeft((int) Char.GetNumericValue(listeCartes[glowPos].GetComponent<Image>().material.name[4]));
+        playerControls.GetMovesLeft((int)Char.GetNumericValue(listeCartes[glowPos].GetComponent<Image>().material.name[4]));
 
         Destroy(listeCartes[glowPos]);
         listeCartes.RemoveAt(glowPos);

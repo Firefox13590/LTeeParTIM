@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.SceneManagement;
 
 public class MenuNavigation : MonoBehaviour
@@ -11,13 +12,14 @@ public class MenuNavigation : MonoBehaviour
     // variables privées
     RectTransform rtrCanvas;
     int menuActuel = 1;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rtrCanvas = GetComponent<RectTransform>();
         Debug.Log(rtrCanvas.rect);
 
-        for(int i = 0; i < listeMenus.Length; i++)
+        for (int i = 0; i < listeMenus.Length; i++)
         {
             listeMenus[i].sizeDelta = new Vector2(rtrCanvas.rect.width, rtrCanvas.rect.height);
             listeMenus[i].anchoredPosition = new Vector2(rtrCanvas.rect.width * (i - 1), 0);

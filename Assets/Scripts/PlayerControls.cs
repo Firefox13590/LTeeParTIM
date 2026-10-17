@@ -2,7 +2,9 @@ using Lib.Entities;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.InputSystem.LowLevel;
 using Random = UnityEngine.Random;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
@@ -28,16 +30,11 @@ public class PlayerControls : MonoBehaviour
     int movesLeft;
     bool allowMove = false;
     BotControls botControls;
-    InputAction touchAction;
+    TouchState touchInput;
 
     // évènements statiques
     public static event Action OnTurnEnd;
     public static event Action OnTileChoiceEnd;
-
-    private void Awake()
-    {
-        touchAction = InputSystem.actions.FindAction("UI/Click");
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -61,9 +58,6 @@ public class PlayerControls : MonoBehaviour
 
 
 
-        Debug.Log(touchAction.ReadValueAsObject());
-        Debug.Log(touchAction.activeValueType);
-
         Debug.Log(Touchscreen.current.primaryTouch.valueType);
         Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
     }
@@ -81,13 +75,6 @@ public class PlayerControls : MonoBehaviour
         if (allowInput)
         {
             SelectionCarte();
-
-            //if (Input.GetKeyDown(gameSettings.Players[GameManager.playerTurn].Controls.Action))
-            //{
-            //    allowInput = false;
-
-            //    cardManager.ChoisirCarte();
-            //}
         }
 
         if (allowMove)
@@ -99,8 +86,6 @@ public class PlayerControls : MonoBehaviour
         {
             ChooseTile();
         }
-
-        //Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
     }
 
 
@@ -216,6 +201,26 @@ public class PlayerControls : MonoBehaviour
                     }
                 }
             }
+
+
+
+            touchInput = Touchscreen.current.primaryTouch.ReadValue();
+            if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
+            {
+                //Debug.Log(touchInput);
+                //Debug.Log(touchInput.position);
+
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(touchInput.position), out RaycastHit hit))
+                {
+                    //Debug.Log(hit.collider.name);
+                    //Debug.Log(hit.collider.name.StartsWith("TileChoice"));
+                    if (hit.collider.name.StartsWith("TileChoice"))
+                    {
+                        gameManager.ChangeTileSelection(hit.collider.gameObject);
+                        TileSelected();
+                    }
+                }
+            }
         }
     }
 
@@ -256,8 +261,6 @@ public class PlayerControls : MonoBehaviour
             //Debug.Log($"bot {gameSettings.Players[GameManager.playerTurn].Name} card selection");
             allowInput = false;
             botControls.Invoke(nameof(botControls.SelectionCarte), Random.Range(0, 1f));
-
-            //return;
         }
         else
         {
@@ -292,6 +295,17 @@ public class PlayerControls : MonoBehaviour
                         cardManager.ChoisirCarte();
                     }
                 }
+            }
+
+
+
+            touchInput = Touchscreen.current.primaryTouch.ReadValue();
+            //Debug.Log(touchInput);
+            if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
+            {
+                //Debug.Log(touchInput);
+                //Debug.Log(touchInput.position);
+                cardManager.ChoisirCarte(touchInput.position);
             }
         }
     }
