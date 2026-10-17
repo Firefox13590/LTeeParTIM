@@ -5,22 +5,23 @@ public class MenuNavigation : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public RectTransform[] listeMenus;
-    [Range(0, 2)]
-    public int menuCible = 1;
+    [Range(0, 1)]
+    public int menuCible = 0;
 
     // variables privées
     RectTransform rtrCanvas;
-    int menuActuel = 1;
+    int menuActuel = 0;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rtrCanvas = GetComponent<RectTransform>();
         Debug.Log(rtrCanvas.rect);
 
-        for(int i = 0; i < listeMenus.Length; i++)
+        for (int i = 0; i < listeMenus.Length; i++)
         {
             listeMenus[i].sizeDelta = new Vector2(rtrCanvas.rect.width, rtrCanvas.rect.height);
-            listeMenus[i].anchoredPosition = new Vector2(rtrCanvas.rect.width * (i - 1), 0);
+            listeMenus[i].anchoredPosition = new Vector2(rtrCanvas.rect.width * i, 0);
         }
 
         GoToMenu(menuCible);

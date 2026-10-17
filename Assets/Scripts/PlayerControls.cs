@@ -1,13 +1,17 @@
 using Lib.Entities;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using Random = UnityEngine.Random;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class PlayerControls : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
-    public GameObject[] playerObjects = new GameObject[4];
+    //public GameObject[] playerObjects = new GameObject[4];
+    public GameObject[] playerObjects = new GameObject[1];
     public Vector3 playerPosAjust = Vector3.zero;
     public GameManager gameManager;
     public CardManager cardManager;
@@ -24,6 +28,7 @@ public class PlayerControls : MonoBehaviour
     int movesLeft;
     bool allowMove = false;
     BotControls botControls;
+    TouchState touchInput;
 
     // évènements statiques
     public static event Action OnTurnEnd;
@@ -32,6 +37,9 @@ public class PlayerControls : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+#if !UNITY_EDITOR
+testCurrentPos = 0;
+#endif
         // abonnement aux évènements
         Case.OnTileChoiceStart += StartTileSelection;
         Case.OnTileRedirect += TileRedirect;
@@ -39,7 +47,7 @@ public class PlayerControls : MonoBehaviour
         listeCases = GameObject.FindGameObjectsWithTag("Case");
         Array.Sort(listeCases, (a, b) => string.CompareOrdinal(a.name, b.name));
 
-        for(int i = 0; i < playerObjects.Length; i++)
+        for (int i = 0; i < playerObjects.Length; i++)
         {
             gameSettings.Players[i].CurrentPos = testCurrentPos;
             playerObjects[i].transform.position = listeCases[gameSettings.Players[i].CurrentPos].transform.position + playerPosAjust;
@@ -48,6 +56,11 @@ public class PlayerControls : MonoBehaviour
         cardManager.gameObject.SetActive(true);
 
         botControls = GetComponent<BotControls>();
+
+
+
+        Debug.Log(Touchscreen.current.primaryTouch.valueType);
+        Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
     }
 
     private void OnDestroy()
@@ -63,13 +76,6 @@ public class PlayerControls : MonoBehaviour
         if (allowInput)
         {
             SelectionCarte();
-
-            //if (Input.GetKeyDown(gameSettings.Players[GameManager.playerTurn].Controls.Action))
-            //{
-            //    allowInput = false;
-
-            //    cardManager.ChoisirCarte();
-            //}
         }
 
         if (allowMove)
@@ -126,7 +132,7 @@ public class PlayerControls : MonoBehaviour
                 movesLeft--;
                 //Debug.Log("current moves left: " + movesLeft);
 
-                if(plannedRedirect != Vector3.zero)
+                if (plannedRedirect != Vector3.zero)
                 {
                     targetPos = plannedRedirect;
                     plannedRedirect = Vector3.zero;
@@ -180,19 +186,23 @@ public class PlayerControls : MonoBehaviour
         else
         {
             //Debug.Log("player tile selection");
-            foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
+
+            touchInput = Touchscreen.current.primaryTouch.ReadValue();
+            if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                if (Input.GetKeyDown(key))
+                //Debug.Log(touchInput);
+                //Debug.Log(touchInput.position);
+
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(touchInput.position), out RaycastHit hit))
                 {
-                    if (key == gameSettings.Players[GameManager.playerTurn].Controls.Action)
+                    //Debug.Log(hit.collider.name);
+                    //Debug.Log(hit.collider.name.StartsWith("TileChoice"));
+                    if (hit.collider.name.StartsWith("TileChoice"))
                     {
-                        // confirme le choix de case avec le bouton d'action
-                        TileSelected();
-                    }
-                    else
-                    {
-                        // change la sélecton avec les autres boutons
-                        gameManager.ChangeTileSelection();
+                        gameManager.ChangeTileSelection(hit.collider.gameObject);
+                        allowTileChoice = false;
+                        Invoke(nameof(TileSelected), 1);
+                        //TileSelected();
                     }
                 }
             }
@@ -236,42 +246,18 @@ public class PlayerControls : MonoBehaviour
             //Debug.Log($"bot {gameSettings.Players[GameManager.playerTurn].Name} card selection");
             allowInput = false;
             botControls.Invoke(nameof(botControls.SelectionCarte), Random.Range(0, 1f));
-
-            //return;
         }
         else
         {
             //Debug.Log("player card selection");
-            foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
+
+            touchInput = Touchscreen.current.primaryTouch.ReadValue();
+            //Debug.Log(touchInput);
+            if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                if (Input.GetKeyDown(key))
-                {
-                    // change la sélection de carte avec les boutons de mouvement
-                    if (key == gameSettings.Players[GameManager.playerTurn].Controls.Up)
-                    {
-                        cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint), true);
-                    }
-                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Down)
-                    {
-                        cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint));
-
-                    }
-                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Right)
-                    {
-                        cardManager.BougerSelecteurCarte(1);
-                    }
-                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Left)
-                    {
-                        cardManager.BougerSelecteurCarte(1, true);
-                    }
-                    else
-                    {
-                        // confrme la sélection avec le bouton d'action
-                        allowInput = false;
-
-                        cardManager.ChoisirCarte();
-                    }
-                }
+                //Debug.Log(touchInput);
+                //Debug.Log(touchInput.position);
+                cardManager.ChoisirCarte(touchInput.position);
             }
         }
     }

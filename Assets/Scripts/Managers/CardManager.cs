@@ -10,7 +10,7 @@ public class CardManager : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public Material[] matCartes = new Material[8];
-    public GameObject glow, cartePrefab;
+    public GameObject cartePrefab;
     public PlayerControls playerControls;
 
     [Header("Acces publique pour autres scripts")]
@@ -18,7 +18,7 @@ public class CardManager : MonoBehaviour
     public float halfPoint;
 
     // variables privées
-    int glowPos = 0;
+    int choicePos = 0;
 
     // évènements publiques statiques
     public static event Action OnCardSelect;
@@ -40,7 +40,7 @@ public class CardManager : MonoBehaviour
     /// </summary>
     void RemplirListeCartes()
     {
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             // instanciation
             GameObject instanceCarte = Instantiate(cartePrefab);
@@ -68,7 +68,7 @@ public class CardManager : MonoBehaviour
 
         int ajustedIndex, nbCartesRangee, row, ajustedX, gap = 100;
         const int width = 200;
-        glowPos = ajustedX = 0;
+        choicePos = ajustedX = 0;
 
         for (int i = 0; i < listeCartes.Count; i++)
         {
@@ -123,9 +123,6 @@ public class CardManager : MonoBehaviour
                 200 - 400 * row);
             //Debug.Log($"new vector2 for {listeCartes[i].name}: {listeCartes[i].GetComponent<RectTransform>().anchoredPosition}");
         }
-
-        // remet l'indice de sélection à la première carte
-        glow.GetComponent<RectTransform>().anchoredPosition = listeCartes[glowPos].GetComponent<RectTransform>().anchoredPosition;
     }
 
     /// <summary>
@@ -134,7 +131,7 @@ public class CardManager : MonoBehaviour
     public void ChoisirCarte()
     {
         //Debug.Log("avant Rotate(): " + listeCartes[glowPos].GetComponent<RectTransform>().rotation);
-        listeCartes[glowPos].GetComponent<RectTransform>().Rotate(0, 180, 0);
+        listeCartes[choicePos].GetComponent<RectTransform>().Rotate(0, 180, 0);
         //Debug.Log("apres Rotate(): " + listeCartes[glowPos].GetComponent<RectTransform>().rotation);
 
         OnCardSelect.Invoke();
@@ -143,9 +140,24 @@ public class CardManager : MonoBehaviour
     }
     public void ChoisirCarte(int pos)
     {
-        glowPos = pos;
-        glow.GetComponent<RectTransform>().anchoredPosition = listeCartes[glowPos].GetComponent<RectTransform>().anchoredPosition;
+        choicePos = pos;
         ChoisirCarte();
+    }
+    public void ChoisirCarte(Vector2 screenPoint)
+    {
+        //Debug.Log($"screenPoint: {screenPoint}");
+
+        for (int i = 0; i < listeCartes.Count; i++)
+        {
+            if (RectTransformUtility.RectangleContainsScreenPoint(listeCartes[i].GetComponent<RectTransform>(), screenPoint))
+            {
+                //Debug.Log("Point in card #" + i);
+                playerControls.allowInput = false;
+                choicePos = i;
+                ChoisirCarte();
+                break;
+            }
+        }
     }
 
     /// <summary>
@@ -155,10 +167,10 @@ public class CardManager : MonoBehaviour
     {
         //Debug.Log(listeCartes[glowPos].GetComponent<Image>().material.name[4]);
         //Debug.Log(Char.GetNumericValue(listeCartes[glowPos].GetComponent<Image>().material.name[4]));
-        playerControls.GetMovesLeft((int) Char.GetNumericValue(listeCartes[glowPos].GetComponent<Image>().material.name[4]));
+        playerControls.GetMovesLeft((int)Char.GetNumericValue(listeCartes[choicePos].GetComponent<Image>().material.name[4]));
 
-        Destroy(listeCartes[glowPos]);
-        listeCartes.RemoveAt(glowPos);
+        Destroy(listeCartes[choicePos]);
+        listeCartes.RemoveAt(choicePos);
         //Debug.Log(listeCartes.Count);
 
         if (listeCartes.Count == 0)
@@ -169,24 +181,5 @@ public class CardManager : MonoBehaviour
         {
             PositionnerCartes();
         }
-    }
-
-    /// <summary>
-    /// Gère le mouvement de l'indice de sélection de carte.
-    /// </summary>
-    /// <param name="move">La quantité de positions du déplacement</param>
-    /// <param name="isReverse">Le sens du déplacement (vers le max ou le min).</param>
-    public void BougerSelecteurCarte(int move, bool isReverse = false)
-    {
-        ComparaisonType comparaison = ComparaisonType.GreaterThan;
-        if (isReverse)
-        {
-            comparaison = (ComparaisonType)(-(int)comparaison);
-        }
-
-        //Debug.Log("glow pos avant: " + glowPos);
-        glowPos = ArrayMovement.CheckForLoopback(glowPos, listeCartes.Count - 1, move, comparaison: comparaison, reverse: isReverse);
-        glow.GetComponent<RectTransform>().anchoredPosition = listeCartes[glowPos].GetComponent<RectTransform>().anchoredPosition;
-        //Debug.Log("glow pos apres: " + glowPos);
     }
 }

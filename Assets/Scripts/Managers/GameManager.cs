@@ -5,6 +5,7 @@ using Lib;
 using TMPro;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,8 +13,8 @@ public class GameManager : MonoBehaviour
     public GameObject popupTileChoice;
     public GameSettingsScriptableObject gameSettings;
     public PlayerControls playerControls;
-    public GameObject[] tileChoiceiIndocators = new GameObject[2], playerStatsPanels = new GameObject[4];
-    public Material[] playerMaterials = new Material[4];
+    public GameObject[] tileChoiceIndocators = new GameObject[2], playerStatsPanels = new GameObject[4];
+    public Material[] playerMaterials = new Material[4], tileChoiceMaterials = new Material[2];
     public TextMeshProUGUI texteToursRestants;
 
     [Header("Acces publique pour autres scripts")]
@@ -21,12 +22,14 @@ public class GameManager : MonoBehaviour
 
     // variables publiques statiques
     public static int playerTurn = 0;
-    public static int turnsLeft = 5;
+    public static int turnsLeft = 10;
 
     private void Awake()
     {
         //gameSettings.SetBackDefaultPlayerSettings();
         gameSettings.ResetPlayerGameStats();
+        TouchSimulation.Enable();
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
     private void Start()
@@ -61,10 +64,11 @@ public class GameManager : MonoBehaviour
         tileChoice = options;
         popupTileChoice.SetActive(true);
 
-        for(int i = 0; i < options.Length; i++)
+        for (int i = 0; i < options.Length; i++)
         {
-            tileChoiceiIndocators[i].transform.position = options[i].transform.position + new Vector3(0, 10);
-            tileChoiceiIndocators[i].SetActive(true);
+            tileChoiceIndocators[i].transform.position = options[i].transform.position + new Vector3(0, 10);
+            tileChoiceIndocators[i].GetComponent<MeshRenderer>().material = tileChoiceMaterials[0];
+            tileChoiceIndocators[i].SetActive(true);
         }
     }
 
@@ -74,7 +78,7 @@ public class GameManager : MonoBehaviour
     void HideTileChoice()
     {
         popupTileChoice.SetActive(false);
-        foreach (GameObject obj in tileChoiceiIndocators)
+        foreach (GameObject obj in tileChoiceIndocators)
         {
             obj.SetActive(false);
         }
@@ -86,10 +90,20 @@ public class GameManager : MonoBehaviour
     public void ChangeTileSelection()
     {
         Array.Reverse(tileChoice);
-        for (int i = 0; i < tileChoiceiIndocators.Length; i++)
+        for (int i = 0; i < tileChoiceIndocators.Length; i++)
         {
-            tileChoiceiIndocators[i].transform.position = tileChoice[i].transform.position + new Vector3(0, 10);
+            tileChoiceIndocators[i].transform.position = tileChoice[i].transform.position + new Vector3(0, 10);
         }
+        HighlightSelectedTile();
+    }
+    public void ChangeTileSelection(GameObject tileChoiceObject)
+    {
+        if (tileChoiceIndocators[0] != tileChoiceObject) ChangeTileSelection();
+        else HighlightSelectedTile();
+    }
+    void HighlightSelectedTile()
+    {
+        tileChoiceIndocators[0].GetComponent<MeshRenderer>().material = tileChoiceMaterials[1];
     }
 
     /// <summary>
@@ -104,7 +118,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
         HighlightPlayerStatsPanel();
 
-        if(playerTurn == 0)
+        if (playerTurn == 0)
         {
             UpdateGameTurn();
         }
@@ -118,7 +132,7 @@ public class GameManager : MonoBehaviour
         turnsLeft--;
         texteToursRestants.text = "Tours restants: " + turnsLeft;
 
-        if(turnsLeft == 0)
+        if (turnsLeft == 0)
         {
             SceneManager.LoadScene(2);
         }
@@ -129,16 +143,24 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void HighlightPlayerStatsPanel()
     {
-        for(int i = 0; i < playerStatsPanels.Length; i++)
+        for (int i = 0; i < playerStatsPanels.Length; i++)
         {
-            if(i == playerTurn)
+            Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta);
+            Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().rect);
+            if (i == playerTurn)
             {
-                playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 350);
+                //playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 350);
+                playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(
+                    playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta.x,
+                    250);
                 playerStatsPanels[i].GetComponentInChildren<Image>().color = playerMaterials[i].color;
             }
             else
             {
-                playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 300);
+                //playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 300);
+                playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(
+                    playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta.x,
+                    200);
                 playerStatsPanels[i].GetComponentInChildren<Image>().color = new Color32(0, 0, 0, 100);
             }
         }
@@ -150,7 +172,7 @@ public class GameManager : MonoBehaviour
     void AddCurrency()
     {
         //Debug.Log(playerStatsPanels[playerTurn].transform.childCount);
-        TextMeshProUGUI textCurrency = playerStatsPanels[playerTurn].transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI textCurrency = playerStatsPanels[playerTurn].transform.GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
         //Debug.Log(textCurrency.text);
 
         gameSettings.Players[playerTurn].Currency += Random.Range(2, 8);

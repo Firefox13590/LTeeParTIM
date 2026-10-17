@@ -26,7 +26,7 @@ public class Case : MonoBehaviour
     {
         // lance des évènements selon certianes conditions
         //Debug.Log("collision avec: " + other.name);
-        if (choixChemin/* && other.gameObject.CompareTag("Player")*/)
+        if (choixChemin)
         {
             OnTileChoiceStart.Invoke(optionsCase);
         }

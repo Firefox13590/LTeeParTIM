@@ -8,9 +8,6 @@ public class BotControls : MonoBehaviour
     public CardManager cardManager;
     public GameManager gameManager;
 
-    [Header("Acces publique pour autres scripts")]
-    public string inputType = "";
-
     // variables privées
     PlayerControls playerControls;
 
