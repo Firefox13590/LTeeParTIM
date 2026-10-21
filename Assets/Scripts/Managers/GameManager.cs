@@ -10,12 +10,12 @@ using UnityEngine.InputSystem.EnhancedTouch;
 public class GameManager : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
-    public GameObject popupTileChoice;
     public GameSettingsScriptableObject gameSettings;
     public PlayerControls playerControls;
-    public GameObject[] tileChoiceIndocators = new GameObject[2], playerStatsPanels = new GameObject[4];
+    public GameObject[] tileChoiceIndocators = new GameObject[2];
     public Material[] playerMaterials = new Material[4], tileChoiceMaterials = new Material[2];
     public TextMeshProUGUI texteToursRestants;
+    public Canvas canvas;
 
     [Header("Acces publique pour autres scripts")]
     public Transform[] tileChoice;
@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     // variables publiques statiques
     public static int playerTurn = 0;
     public static int turnsLeft = 10;
+
+    GameObject popupTileChoice;
+    GameObject[] playerStatsPanels = new GameObject[4];
 
     private void Awake()
     {
@@ -38,6 +41,13 @@ public class GameManager : MonoBehaviour
         Case.OnTileChoiceStart += DisplayTileChoice;
         PlayerControls.OnTurnEnd += UpdatePlayerTurn;
         PlayerControls.OnTileChoiceEnd += HideTileChoice;
+
+
+        popupTileChoice = canvas.transform.GetChild(0).gameObject;
+        for (int i = 0; i < 4; i++)
+        {
+            playerStatsPanels[i] = canvas.transform.GetChild(2).GetChild(0).GetChild(i).gameObject;
+        }
 
         //Debug.Log(playerMaterials[0].color);
         HighlightPlayerStatsPanel();
@@ -145,8 +155,8 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < playerStatsPanels.Length; i++)
         {
-            Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta);
-            Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().rect);
+            //Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta);
+            //Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().rect);
             if (i == playerTurn)
             {
                 //playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 350);

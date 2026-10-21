@@ -14,7 +14,6 @@ public class PlayerControls : MonoBehaviour
     public GameObject[] playerObjects = new GameObject[1];
     public Vector3 playerPosAjust = Vector3.zero;
     public GameManager gameManager;
-    public CardManager cardManager;
 
     [Header("Variables de test")]
     public int testCurrentPos = 0;
@@ -29,6 +28,7 @@ public class PlayerControls : MonoBehaviour
     bool allowMove = false;
     BotControls botControls;
     TouchState touchInput;
+    CardManager cardManager;
 
     // évènements statiques
     public static event Action OnTurnEnd;
@@ -53,14 +53,13 @@ testCurrentPos = 0;
             playerObjects[i].transform.position = listeCases[gameSettings.Players[i].CurrentPos].transform.position + playerPosAjust;
         }
 
-        cardManager.gameObject.SetActive(true);
-
         botControls = GetComponent<BotControls>();
 
+        //Debug.Log(Touchscreen.current.primaryTouch.valueType);
+        //Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
 
-
-        Debug.Log(Touchscreen.current.primaryTouch.valueType);
-        Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
+        cardManager = gameManager.canvas.transform.GetChild(1).GetComponent<CardManager>();
+        cardManager.gameObject.SetActive(true);
     }
 
     private void OnDestroy()
