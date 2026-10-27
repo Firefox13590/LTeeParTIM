@@ -29,8 +29,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        //gameSettings.SetBackDefaultPlayerSettings();
-        gameSettings.ResetPlayerGameStats();
+        gameSettings = LobbyManager.instance.gameSettings;
         Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 

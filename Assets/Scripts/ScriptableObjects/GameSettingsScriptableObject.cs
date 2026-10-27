@@ -30,6 +30,7 @@ public class GameSettingsScriptableObject : ScriptableObject
     }
 
 
+
     public GameSettingsScriptableObject()
     {
         Init();
@@ -60,6 +61,7 @@ public class GameSettingsScriptableObject : ScriptableObject
     {
         players.RemoveAt(pos);
     }
+
     public void ChangeTurnCount(int newTurnCount)
     {
         maxTurnCount = newTurnCount;
