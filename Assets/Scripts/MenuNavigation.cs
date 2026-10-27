@@ -18,11 +18,11 @@ public class MenuNavigation : MonoBehaviour
         rtrCanvas = GetComponent<RectTransform>();
         Debug.Log(rtrCanvas.rect);
 
-        for (int i = 0; i < listeMenus.Length; i++)
-        {
-            listeMenus[i].sizeDelta = new Vector2(rtrCanvas.rect.width, rtrCanvas.rect.height);
-            listeMenus[i].anchoredPosition = new Vector2(rtrCanvas.rect.width * i, 0);
-        }
+        //for (int i = 0; i < listeMenus.Length; i++)
+        //{
+        //    listeMenus[i].sizeDelta = new Vector2(rtrCanvas.rect.width, rtrCanvas.rect.height);
+        //    listeMenus[i].anchoredPosition = new Vector2(rtrCanvas.rect.width * i, 0);
+        //}
 
         GoToMenu(menuCible);
     }

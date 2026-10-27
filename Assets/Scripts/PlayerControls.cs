@@ -187,9 +187,10 @@ testCurrentPos = 0;
             //Debug.Log("player tile selection");
 
             touchInput = Touchscreen.current.primaryTouch.ReadValue();
+            //Debug.Log(touchInput);
             if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                //Debug.Log(touchInput);
+                Debug.Log(touchInput);
                 //Debug.Log(touchInput.position);
 
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(touchInput.position), out RaycastHit hit))
@@ -254,7 +255,7 @@ testCurrentPos = 0;
             //Debug.Log(touchInput);
             if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                //Debug.Log(touchInput);
+                Debug.Log(touchInput);
                 //Debug.Log(touchInput.position);
                 cardManager.ChoisirCarte(touchInput.position);
             }

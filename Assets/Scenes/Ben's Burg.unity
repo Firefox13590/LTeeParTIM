@@ -6942,7 +6942,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
+  m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -15544,7 +15544,6 @@ MonoBehaviour:
   - {fileID: 1381932643}
   playerPosAjust: {x: 0, y: 1, z: 0}
   gameManager: {fileID: 25559777}
-  cardManager: {fileID: 1360395951}
   testCurrentPos: 30
   allowTileChoice: 0
   allowInput: 1
