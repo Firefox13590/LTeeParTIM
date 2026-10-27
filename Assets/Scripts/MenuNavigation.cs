@@ -5,7 +5,6 @@ public class MenuNavigation : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public RectTransform[] listeMenus;
-    [Range(0, 1)]
     public int menuCible = 0;
 
     // variables privées

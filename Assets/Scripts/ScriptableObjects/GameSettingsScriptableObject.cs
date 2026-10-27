@@ -1,33 +1,73 @@
 using UnityEngine;
 using Lib.Entities;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "GameSettingsScriptableObject", menuName = "Scriptable Objects/GameSettingsScriptableObject")]
 public class GameSettingsScriptableObject : ScriptableObject
 {
-    private Player player1 = new("Player1");
-    private Player player3 = new Bot("Bot1");
-    private Player player2 = new Bot("Bot2");
-    private Player player4 = new Bot("Bot3");
 
-    //private Player[] players;
-    public Player[] Players
+    private List<Player> players;
+    public List<Player> Players
     {
         get
         {
-            //return new Player[4] { player1, player2, player3, player4 };
-            return new Player[1] { player1 };
+            return players;
         }
+    }
+
+    private int maxTurnCount = 10;
+    public int MaxTurnCount
+    {
+        get { return maxTurnCount; }
+        private set { maxTurnCount = value; }
+    }
+
+    private bool allowMinigames = true;
+    public bool AllowMinigames
+    {
+        get { return allowMinigames; }
+        private set { allowMinigames = value; }
+    }
+
+
+    public GameSettingsScriptableObject()
+    {
+        Init();
     }
 
     /// <summary>
     /// Remet tous les controles des joueurs aux valeurs par defaut.
     /// </summary>
-    public void SetBackDefaultPlayerSettings()
+    public void Init()
     {
-        player1 = new("Player1");
-        player2 = new Bot("Bot1");
-        player3 = new Bot("Bot2");
-        player4 = new Bot("Bot3");
+        players = new() { new Player("Joueur 1") };
+        maxTurnCount = 10;
+        allowMinigames = true;
+
+        ResetPlayerGameStats();
+    }
+
+    public void AddPlayer(bool isBot = false)
+    {
+        if (players.Count < 4)
+        {
+            if (isBot) players.Add(new Bot());
+            else players.Add(new Player());
+        }
+    }
+
+    public void RemovePlayer(int pos)
+    {
+        players.RemoveAt(pos);
+    }
+    public void ChangeTurnCount(int newTurnCount)
+    {
+        maxTurnCount = newTurnCount;
+    }
+
+    public void ToggleMinigames()
+    {
+        allowMinigames = !allowMinigames;
     }
 
     /// <summary>

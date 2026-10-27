@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour
     {
         //gameSettings.SetBackDefaultPlayerSettings();
         gameSettings.ResetPlayerGameStats();
-        TouchSimulation.Enable();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
@@ -124,7 +123,7 @@ public class GameManager : MonoBehaviour
     {
         AddCurrency();
 
-        playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, gameSettings.Players.Length);
+        playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, gameSettings.Players.Count);
         //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
         HighlightPlayerStatsPanel();
 
