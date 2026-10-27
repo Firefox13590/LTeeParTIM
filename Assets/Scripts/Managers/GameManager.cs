@@ -5,10 +5,12 @@ using Lib;
 using TMPro;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem.EnhancedTouch;
 
+[DefaultExecutionOrder(0)]
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
     public PlayerControls playerControls;
@@ -29,7 +31,17 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        gameSettings = LobbyManager.instance.gameSettings;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(this);
+        }
+
+        if (gameSettings == null) gameSettings = LobbyManager.Instance.gameSettings;
         Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 

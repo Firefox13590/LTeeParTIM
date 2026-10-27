@@ -6,7 +6,6 @@ public class BotControls : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public CardManager cardManager;
-    public GameManager gameManager;
 
     // variables privées
     PlayerControls playerControls;
@@ -35,7 +34,7 @@ public class BotControls : MonoBehaviour
         if (Convert.ToBoolean(Random.Range(0, 2)))
         {
             //Debug.Log("bot changed tile selection");
-            gameManager.ChangeTileSelection();
+            GameManager.Instance.ChangeTileSelection();
         }
 
         playerControls.TileSelected();

@@ -13,7 +13,6 @@ public class PlayerControls : MonoBehaviour
     //public GameObject[] playerObjects = new GameObject[4];
     public GameObject[] playerObjects = new GameObject[1];
     public Vector3 playerPosAjust = Vector3.zero;
-    public GameManager gameManager;
 
     [Header("Variables de test")]
     public int testCurrentPos = 0;
@@ -40,6 +39,9 @@ public class PlayerControls : MonoBehaviour
 #if !UNITY_EDITOR
 testCurrentPos = 0;
 #endif
+
+        gameSettings = GameManager.Instance.gameSettings;
+
         // abonnement aux évènements
         Case.OnTileChoiceStart += StartTileSelection;
         Case.OnTileRedirect += TileRedirect;
@@ -55,10 +57,10 @@ testCurrentPos = 0;
 
         botControls = GetComponent<BotControls>();
 
-        //Debug.Log(Touchscreen.current.primaryTouch.valueType);
-        //Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
+        Debug.Log(Touchscreen.current.primaryTouch.valueType);
+        Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
 
-        cardManager = gameManager.canvas.transform.GetChild(1).GetComponent<CardManager>();
+        cardManager = GameManager.Instance.canvas.transform.GetChild(1).GetComponent<CardManager>();
         cardManager.gameObject.SetActive(true);
     }
 
@@ -199,7 +201,7 @@ testCurrentPos = 0;
                     //Debug.Log(hit.collider.name.StartsWith("TileChoice"));
                     if (hit.collider.name.StartsWith("TileChoice"))
                     {
-                        gameManager.ChangeTileSelection(hit.collider.gameObject);
+                        GameManager.Instance.ChangeTileSelection(hit.collider.gameObject);
                         allowTileChoice = false;
                         Invoke(nameof(TileSelected), 1);
                         //TileSelected();
@@ -214,9 +216,9 @@ testCurrentPos = 0;
     /// </summary>
     public void TileSelected()
     {
-        //Debug.Log(gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
-        gameSettings.Players[GameManager.playerTurn].CurrentPos = gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase - 1;
-        targetPos = gameManager.tileChoice[0].transform.position + playerPosAjust;
+        //Debug.Log(GameManager.Instance.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
+        gameSettings.Players[GameManager.playerTurn].CurrentPos = GameManager.Instance.tileChoice[0].gameObject.GetComponent<Case>().indexCase - 1;
+        targetPos = GameManager.Instance.tileChoice[0].transform.position + playerPosAjust;
 
         OnTileChoiceEnd.Invoke();
 

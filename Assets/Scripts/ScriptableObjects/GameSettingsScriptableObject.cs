@@ -1,6 +1,7 @@
 using UnityEngine;
 using Lib.Entities;
 using System.Collections.Generic;
+using System;
 
 [CreateAssetMenu(fileName = "GameSettingsScriptableObject", menuName = "Scriptable Objects/GameSettingsScriptableObject")]
 public class GameSettingsScriptableObject : ScriptableObject
@@ -36,30 +37,44 @@ public class GameSettingsScriptableObject : ScriptableObject
         Init();
     }
 
+    public override string ToString()
+    {
+        return $"{{ playerCount={players.Count} maxTurnCount={maxTurnCount} allowMinigames={allowMinigames} }}";
+    }
+
     /// <summary>
     /// Remet tous les controles des joueurs aux valeurs par defaut.
     /// </summary>
     public void Init()
     {
-        players = new() { new Player("Joueur 1") };
+        players = new();
         maxTurnCount = 10;
         allowMinigames = true;
 
         ResetPlayerGameStats();
     }
 
-    public void AddPlayer(bool isBot = false)
+    public void AddPlayer(bool isBot = true)
     {
-        if (players.Count < 4)
+        if (players.Count < 4 && isBot)
         {
-            if (isBot) players.Add(new Bot());
-            else players.Add(new Player());
+            players.Add(new Bot($"Robot {players.Count + 1}"));
         }
+        else if (players.Count > 1 && !isBot)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i] is Bot) players[i] = new Player($"Joueur {i + 1}");
+            }
+        }
+        else if (players.Count == 0 && !isBot)
+            players.Add(new Bot($"Robot {players.Count + 1}"));
     }
 
-    public void RemovePlayer(int pos)
+    public void RemovePlayer(int pos = -1)
     {
-        players.RemoveAt(pos);
+        if (pos == -1 && players.Count > 1) players.RemoveAt(players.Count - 1);
+        else players.RemoveAt(pos);
     }
 
     public void ChangeTurnCount(int newTurnCount)

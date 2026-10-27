@@ -2966,7 +2966,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 466302320809116427, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6342731233962426772, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -3753,7 +3753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 466302320809116427, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6342731233962426772, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -7070,7 +7070,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 466302320809116427, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6342731233962426772, guid: 0c5275f439a496e4f978f9f0a0b13499, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -15543,7 +15543,6 @@ MonoBehaviour:
   playerObjects:
   - {fileID: 1381932643}
   playerPosAjust: {x: 0, y: 1, z: 0}
-  gameManager: {fileID: 25559777}
   testCurrentPos: 30
   allowTileChoice: 0
   allowInput: 1
@@ -15562,7 +15561,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BotControls
   cardManager: {fileID: 1360395951}
-  gameManager: {fileID: 25559777}
 --- !u!1001 &2015512877
 PrefabInstance:
   m_ObjectHideFlags: 0
