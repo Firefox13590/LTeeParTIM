@@ -97,4 +97,8 @@ public class LobbyManager : NetworkBehaviour
         //NetworkManager.Singleton.StartClient();
         RelayManager.instance.StartCoroutine(RelayManager.instance.ConfigureTransportAndStartNgoAsConnectingPlayer());
     }
+    public void LancerPartie()
+    {
+        NetworkManager.SceneManager.LoadScene("Ben's Burg", UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
 }
