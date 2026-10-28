@@ -9,7 +9,6 @@ public class LobbyManager : NetworkBehaviour
 
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public TMP_Dropdown dropdown;
-    public GameObject controlesHote;
     public GameObject[] prefabsPlayer = new GameObject[4];
     public Vector3[] spawnsJoueurs = new Vector3[4];
     public GameSettingsScriptableObject gameSettings;
@@ -49,6 +48,7 @@ public class LobbyManager : NetworkBehaviour
 
     public void ChangeTurnCount(int dropdownIndex)
     {
+        if (!IsHost) return;
         string optionText = dropdown.options[dropdownIndex].text;
         //Debug.Log(optionText);
         int newTurnCount = int.Parse(optionText);
@@ -59,12 +59,14 @@ public class LobbyManager : NetworkBehaviour
 
     public void ToggleMinigames()
     {
+        if (!IsHost) return;
         gameSettings.ToggleMinigames();
         DebugGameSettings();
     }
 
     void ManagePlayers(NetworkManager _, ConnectionEventData eventData)
     {
+        if (!IsHost) return;
         Debug.Log("NetworkManager.OnConnectionEvent");
         //Debug.Log(eventData.EventType);
         if (eventData.EventType == ConnectionEvent.ClientConnected)
@@ -87,8 +89,6 @@ public class LobbyManager : NetworkBehaviour
 
     public void LancerHote()
     {
-        controlesHote.SetActive(true);
-
         //NetworkManager.Singleton.StartHost();
         RelayManager.instance.StartCoroutine(RelayManager.instance.ConfigureTransportAndStartNgoAsHost());
     }

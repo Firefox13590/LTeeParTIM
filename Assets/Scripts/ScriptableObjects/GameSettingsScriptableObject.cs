@@ -56,19 +56,19 @@ public class GameSettingsScriptableObject : ScriptableObject
 
     public void AddPlayer(bool isBot = true)
     {
-        if (players.Count < 4 && isBot)
+        if (players.Count < 4)
         {
-            players.Add(new Bot($"Robot {players.Count + 1}"));
+            players.Add((isBot) ? new Bot($"Robot {players.Count + 1}") : new Player($"Joueur {players.Count + 1}"));
+            return;
         }
-        else if (players.Count > 1 && !isBot)
+        else if (!isBot)
         {
             for (int i = 0; i < players.Count; i++)
             {
                 if (players[i] is Bot) players[i] = new Player($"Joueur {i + 1}");
+                return;
             }
         }
-        else if (players.Count == 0 && !isBot)
-            players.Add(new Bot($"Robot {players.Count + 1}"));
     }
 
     public void RemovePlayer(int pos = -1)
