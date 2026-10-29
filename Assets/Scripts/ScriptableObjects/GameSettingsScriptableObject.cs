@@ -54,7 +54,7 @@ public class GameSettingsScriptableObject : ScriptableObject
         maxTurnCount = 10;
         allowMinigames = true;
 
-        ResetPlayerGameStats();
+        //ResetPlayerGameStats();
     }
 
     public void AddPlayer(bool isBot = true)
@@ -79,8 +79,11 @@ public class GameSettingsScriptableObject : ScriptableObject
 
     public void RemovePlayer(int pos)
     {
-        Debug.Log(players[pos].Name + " has left...");
-        players[pos] = null;
+        if (players[pos] != null)
+        {
+            Debug.Log(players[pos].Name + " has left...");
+            players[pos] = null;
+        }
     }
 
     public void ChangeTurnCount(int newTurnCount)
@@ -98,6 +101,7 @@ public class GameSettingsScriptableObject : ScriptableObject
     /// </summary>
     public void ResetPlayerGameStats()
     {
+        if (players.Length == 0) return;
         foreach (Player player in Players)
         {
             player.CurrentPos = 0;

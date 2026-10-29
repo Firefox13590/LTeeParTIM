@@ -90,6 +90,11 @@ public class LobbyManager : NetworkBehaviour
         gameSettings.AddPlayer(isBot);
         DebugGameSettings();
     }
+    public void ManagePlayers(int playerPos)
+    {
+        NetworkManager.DisconnectClient((ulong)playerPos);
+        gameSettings.RemovePlayer(playerPos);
+    }
 
 
     public void LancerHote()
@@ -105,11 +110,5 @@ public class LobbyManager : NetworkBehaviour
     public void LancerPartie()
     {
         NetworkManager.SceneManager.LoadScene("Ben's Burg", UnityEngine.SceneManagement.LoadSceneMode.Single);
-    }
-    public void Quitter()
-    {
-        NetworkManager.Singleton.Shutdown();
-        SceneManager.LoadScene(0);
-        Destroy(this);
     }
 }
