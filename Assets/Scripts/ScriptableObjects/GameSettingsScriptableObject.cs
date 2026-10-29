@@ -7,14 +7,17 @@ using System;
 public class GameSettingsScriptableObject : ScriptableObject
 {
 
-    private List<Player> players;
-    public List<Player> Players
+    private Player[] players = new Player[4];
+    public Player[] Players
     {
         get
         {
             return players;
         }
     }
+
+    private int playerCount = 1;
+    private int botCount = 0;
 
     private int maxTurnCount = 10;
     public int MaxTurnCount
@@ -39,7 +42,7 @@ public class GameSettingsScriptableObject : ScriptableObject
 
     public override string ToString()
     {
-        return $"{{ playerCount={players.Count} maxTurnCount={maxTurnCount} allowMinigames={allowMinigames} }}";
+        return $"{{ playerCount={playerCount} botCount={botCount} maxTurnCount={maxTurnCount} allowMinigames={allowMinigames} }}";
     }
 
     /// <summary>
@@ -47,7 +50,7 @@ public class GameSettingsScriptableObject : ScriptableObject
     /// </summary>
     public void Init()
     {
-        players = new();
+        players = new Player[4];
         maxTurnCount = 10;
         allowMinigames = true;
 
@@ -56,25 +59,28 @@ public class GameSettingsScriptableObject : ScriptableObject
 
     public void AddPlayer(bool isBot = true)
     {
-        if (players.Count < 4)
+        bool playerAdded = false;
+        for (int i = 0; i < players.Length; i++)
         {
-            players.Add((isBot) ? new Bot($"Robot {players.Count + 1}") : new Player($"Joueur {players.Count + 1}"));
-            return;
-        }
-        else if (!isBot)
-        {
-            for (int i = 0; i < players.Count; i++)
+            if (playerAdded)
             {
-                if (players[i] is Bot) players[i] = new Player($"Joueur {i + 1}");
-                return;
+                Debug.Log(players[i].Name + " has joined!");
+                break;
             }
+
+            if (players[i] == null)
+            {
+                players[i] = (isBot) ? new Bot($"Robot {players.Length + 1}") : new Player($"Joueur {players.Length + 1}");
+                break;
+            }
+            else if (players[i] is Bot && !isBot) players[i] = new Player($"Joueur {i + 1}");
         }
     }
 
-    public void RemovePlayer(int pos = -1)
+    public void RemovePlayer(int pos)
     {
-        if (pos == -1 && players.Count > 1) players.RemoveAt(players.Count - 1);
-        else players.RemoveAt(pos);
+        Debug.Log(players[pos].Name + " has left...");
+        players[pos] = null;
     }
 
     public void ChangeTurnCount(int newTurnCount)

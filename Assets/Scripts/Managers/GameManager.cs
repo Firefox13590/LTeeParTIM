@@ -133,15 +133,22 @@ public class GameManager : MonoBehaviour
     /// <remarks>À chaque fois que <see cref="playerTurn"/> revient à 0, décrémente <see cref="turnsLeft"/>.</remarks>
     void UpdatePlayerTurn()
     {
-        AddCurrency();
-
-        playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, gameSettings.Players.Count);
-        //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
-        HighlightPlayerStatsPanel();
-
-        if (playerTurn == 0)
+        if (gameSettings.Players[playerTurn] == null)
         {
             UpdateGameTurn();
+        }
+        else
+        {
+            AddCurrency();
+
+            playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, gameSettings.Players.Length);
+            //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
+            HighlightPlayerStatsPanel();
+
+            if (playerTurn == 0)
+            {
+                UpdateGameTurn();
+            }
         }
     }
 

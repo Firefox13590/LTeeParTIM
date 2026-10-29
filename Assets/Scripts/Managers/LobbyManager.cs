@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(0)]
 public class LobbyManager : NetworkBehaviour
@@ -81,9 +82,13 @@ public class LobbyManager : NetworkBehaviour
                 true,
                 position: spawnsJoueurs[eventData.ClientId]);
 
-            gameSettings.AddPlayer(false);
-            DebugGameSettings();
+            ManagePlayers(false);
         }
+    }
+    public void ManagePlayers(bool isBot = true)
+    {
+        gameSettings.AddPlayer(isBot);
+        DebugGameSettings();
     }
 
 
@@ -100,5 +105,11 @@ public class LobbyManager : NetworkBehaviour
     public void LancerPartie()
     {
         NetworkManager.SceneManager.LoadScene("Ben's Burg", UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+    public void Quitter()
+    {
+        NetworkManager.Singleton.Shutdown();
+        SceneManager.LoadScene(0);
+        Destroy(this);
     }
 }

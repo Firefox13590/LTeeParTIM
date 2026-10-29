@@ -49,6 +49,9 @@ testCurrentPos = 0;
 
         for (int i = 0; i < playerObjects.Length; i++)
         {
+            if (gameSettings.Players[i] == null) continue;
+            playerObjects[i] = transform.GetChild(i).gameObject;
+            playerObjects[i].SetActive(true);
             gameSettings.Players[i].CurrentPos = testCurrentPos;
             playerObjects[i].transform.position = listeCases[gameSettings.Players[i].CurrentPos].transform.position + playerPosAjust;
         }
