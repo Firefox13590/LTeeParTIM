@@ -32,11 +32,17 @@ namespace Lib.Entities
     public class Player : Entity
     {
         private int currency = 0;
-
         public int Currency
         {
             get { return currency; }
             set { currency = value; }
+        }
+
+        private GameObject playerModel = null;
+        public GameObject PlayerModel
+        {
+            get { return playerModel; }
+            set { playerModel = value; }
         }
 
         public Player() : base("Player") { }

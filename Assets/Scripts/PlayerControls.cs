@@ -4,17 +4,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using Random = UnityEngine.Random;
-using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class PlayerControls : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
-    //public GameObject[] playerObjects = new GameObject[4];
-    public GameObject[] playerObjects = new GameObject[1];
+    public GameObject[] playerObjects = new GameObject[4];
     public Vector3 playerPosAjust = Vector3.zero;
-    public GameManager gameManager;
-    public CardManager cardManager;
 
     [Header("Variables de test")]
     public int testCurrentPos = 0;
@@ -29,6 +25,7 @@ public class PlayerControls : MonoBehaviour
     bool allowMove = false;
     BotControls botControls;
     TouchState touchInput;
+    CardManager cardManager;
 
     // évènements statiques
     public static event Action OnTurnEnd;
@@ -40,6 +37,9 @@ public class PlayerControls : MonoBehaviour
 #if !UNITY_EDITOR
 testCurrentPos = 0;
 #endif
+
+        gameSettings = GameManager.Instance.gameSettings;
+
         // abonnement aux évènements
         Case.OnTileChoiceStart += StartTileSelection;
         Case.OnTileRedirect += TileRedirect;
@@ -49,18 +49,20 @@ testCurrentPos = 0;
 
         for (int i = 0; i < playerObjects.Length; i++)
         {
+            if (gameSettings.Players[i] == null) continue;
+            playerObjects[i] = transform.GetChild(i).gameObject;
+            playerObjects[i].SetActive(true);
             gameSettings.Players[i].CurrentPos = testCurrentPos;
             playerObjects[i].transform.position = listeCases[gameSettings.Players[i].CurrentPos].transform.position + playerPosAjust;
         }
 
-        cardManager.gameObject.SetActive(true);
-
         botControls = GetComponent<BotControls>();
-
-
 
         Debug.Log(Touchscreen.current.primaryTouch.valueType);
         Debug.Log(Touchscreen.current.primaryTouch.ReadValue());
+
+        cardManager = GameManager.Instance.canvas.transform.GetChild(1).GetComponent<CardManager>();
+        cardManager.gameObject.SetActive(true);
     }
 
     private void OnDestroy()
@@ -188,9 +190,10 @@ testCurrentPos = 0;
             //Debug.Log("player tile selection");
 
             touchInput = Touchscreen.current.primaryTouch.ReadValue();
+            //Debug.Log(touchInput);
             if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                //Debug.Log(touchInput);
+                Debug.Log(touchInput);
                 //Debug.Log(touchInput.position);
 
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(touchInput.position), out RaycastHit hit))
@@ -199,7 +202,7 @@ testCurrentPos = 0;
                     //Debug.Log(hit.collider.name.StartsWith("TileChoice"));
                     if (hit.collider.name.StartsWith("TileChoice"))
                     {
-                        gameManager.ChangeTileSelection(hit.collider.gameObject);
+                        GameManager.Instance.ChangeTileSelection(hit.collider.gameObject);
                         allowTileChoice = false;
                         Invoke(nameof(TileSelected), 1);
                         //TileSelected();
@@ -214,9 +217,9 @@ testCurrentPos = 0;
     /// </summary>
     public void TileSelected()
     {
-        //Debug.Log(gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
-        gameSettings.Players[GameManager.playerTurn].CurrentPos = gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase - 1;
-        targetPos = gameManager.tileChoice[0].transform.position + playerPosAjust;
+        //Debug.Log(GameManager.Instance.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
+        gameSettings.Players[GameManager.playerTurn].CurrentPos = GameManager.Instance.tileChoice[0].gameObject.GetComponent<Case>().indexCase - 1;
+        targetPos = GameManager.Instance.tileChoice[0].transform.position + playerPosAjust;
 
         OnTileChoiceEnd.Invoke();
 
@@ -255,7 +258,7 @@ testCurrentPos = 0;
             //Debug.Log(touchInput);
             if (touchInput.isPrimaryTouch && touchInput.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                //Debug.Log(touchInput);
+                Debug.Log(touchInput);
                 //Debug.Log(touchInput.position);
                 cardManager.ChoisirCarte(touchInput.position);
             }

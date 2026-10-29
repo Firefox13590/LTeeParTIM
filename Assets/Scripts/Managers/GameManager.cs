@@ -5,17 +5,19 @@ using Lib;
 using TMPro;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem.EnhancedTouch;
 
+[DefaultExecutionOrder(0)]
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     [Header("Valeurs a ajuster dans l'inspecteur")]
-    public GameObject popupTileChoice;
     public GameSettingsScriptableObject gameSettings;
     public PlayerControls playerControls;
-    public GameObject[] tileChoiceIndocators = new GameObject[2], playerStatsPanels = new GameObject[4];
+    public GameObject[] tileChoiceIndocators = new GameObject[2];
     public Material[] playerMaterials = new Material[4], tileChoiceMaterials = new Material[2];
     public TextMeshProUGUI texteToursRestants;
+    public Canvas canvas;
 
     [Header("Acces publique pour autres scripts")]
     public Transform[] tileChoice;
@@ -24,11 +26,23 @@ public class GameManager : MonoBehaviour
     public static int playerTurn = 0;
     public static int turnsLeft = 10;
 
+    GameObject popupTileChoice;
+    GameObject[] playerStatsPanels = new GameObject[4];
+
     private void Awake()
     {
-        //gameSettings.SetBackDefaultPlayerSettings();
-        gameSettings.ResetPlayerGameStats();
-        TouchSimulation.Enable();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(this);
+        }
+
+        if (LobbyManager.Instance != null) gameSettings = LobbyManager.Instance.gameSettings;
+        if (gameSettings == null) gameSettings = ScriptableObject.CreateInstance<GameSettingsScriptableObject>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
@@ -38,6 +52,13 @@ public class GameManager : MonoBehaviour
         Case.OnTileChoiceStart += DisplayTileChoice;
         PlayerControls.OnTurnEnd += UpdatePlayerTurn;
         PlayerControls.OnTileChoiceEnd += HideTileChoice;
+
+
+        popupTileChoice = canvas.transform.GetChild(0).gameObject;
+        for (int i = 0; i < 4; i++)
+        {
+            playerStatsPanels[i] = canvas.transform.GetChild(2).GetChild(0).GetChild(i).gameObject;
+        }
 
         //Debug.Log(playerMaterials[0].color);
         HighlightPlayerStatsPanel();
@@ -112,15 +133,22 @@ public class GameManager : MonoBehaviour
     /// <remarks>À chaque fois que <see cref="playerTurn"/> revient à 0, décrémente <see cref="turnsLeft"/>.</remarks>
     void UpdatePlayerTurn()
     {
-        AddCurrency();
-
-        playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, gameSettings.Players.Length);
-        //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
-        HighlightPlayerStatsPanel();
-
-        if (playerTurn == 0)
+        if (gameSettings.Players[playerTurn] == null)
         {
             UpdateGameTurn();
+        }
+        else
+        {
+            AddCurrency();
+
+            playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, gameSettings.Players.Length);
+            //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
+            HighlightPlayerStatsPanel();
+
+            if (playerTurn == 0)
+            {
+                UpdateGameTurn();
+            }
         }
     }
 
@@ -145,8 +173,8 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < playerStatsPanels.Length; i++)
         {
-            Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta);
-            Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().rect);
+            //Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta);
+            //Debug.Log(playerStatsPanels[i].GetComponent<RectTransform>().rect);
             if (i == playerTurn)
             {
                 //playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 350);
