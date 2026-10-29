@@ -19,7 +19,8 @@ using TMPro;
 public class RelayManager : MonoBehaviour
 {
     public static RelayManager instance;
-    const int m_MaxConnections = 1; // Celui qui �tabli le relais compte d��
+    [Tooltip("Celui qui établit le relais compte déjà, donc enlever 1 au nombre total de clients souhaités")]
+    [SerializeField] int m_MaxConnections = 1; // Celui qui �tabli le relais compte d��
     public string RelayJoinCode;
 
     private Allocation allocation; // ajout, diff�rent du tuto

@@ -41,7 +41,8 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
 
-        if (gameSettings == null) gameSettings = LobbyManager.Instance.gameSettings;
+        if (LobbyManager.Instance != null) gameSettings = LobbyManager.Instance.gameSettings;
+        if (gameSettings == null) gameSettings = ScriptableObject.CreateInstance<GameSettingsScriptableObject>();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 

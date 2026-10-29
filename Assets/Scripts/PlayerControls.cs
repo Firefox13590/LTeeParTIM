@@ -4,14 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using Random = UnityEngine.Random;
-using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class PlayerControls : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
-    //public GameObject[] playerObjects = new GameObject[4];
-    public GameObject[] playerObjects = new GameObject[1];
+    public GameObject[] playerObjects = new GameObject[4];
     public Vector3 playerPosAjust = Vector3.zero;
 
     [Header("Variables de test")]
