@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity;
 using Unity.Netcode;
 
 [RequireComponent(typeof(CharacterController))]
@@ -16,59 +15,83 @@ public class JoueurMove : NetworkBehaviour
     private Vector3 velocite;
     private Transform cameraTransform;
 
+   public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (controller == null)
+            controller = GetComponent<CharacterController>();
+
+        // Récupérer le PlayerInput
+        PlayerInput playerInput = GetComponent<PlayerInput>();
+
+        if (IsOwner)
+        {
+            // Activer les contrôles uniquement pour le joueur local
+            if (playerInput != null) playerInput.enabled = true;
+
+            controller.enabled = false;
+            
+            Vector3[] positionsSpawn = new Vector3[]
+            {
+                new Vector3(-17.4599991f, 11.3339996f, -14.8900003f), 
+                new Vector3(-3f, 11.3190002f, -29.4699993f),          
+                new Vector3(-2.00999999f, 11.335f, 0.699999988f),     
+                new Vector3(12.9099998f, 11.309f, -14.1400003f)       
+            };
+
+            int index = (int)(OwnerClientId % (ulong)positionsSpawn.Length); 
+            transform.position = positionsSpawn[index];
+            
+            controller.enabled = true;
+        }
+        else
+        {
+            // Désactiver le PlayerInput pour les personnages des autres joueurs
+            if (playerInput != null) playerInput.enabled = false;
+        }
+    }
     void Start()
     {
-        controller = GetComponent<CharacterController>();
-        // Récupère automatiquement la caméra principale
+        if (controller == null)
+            controller = GetComponent<CharacterController>();
+            
         cameraTransform = Camera.main.transform;
     }
 
-    public void OnMove(InputValue value)
-    {
-        moveInput = value.Get<Vector2>();
-    }
+    public void OnMove(InputValue value) { moveInput = value.Get<Vector2>(); }
 
     public void OnJump(InputValue value)
     {
         if (value.isPressed && controller.isGrounded)
-        {
             velocite.y = Mathf.Sqrt(hauteurSaut * -2f * gravite);
-        }
     }
 
     void Update()
     {
-        if (controller.isGrounded && velocite.y < 0)
-        {
-            velocite.y = -2f;
-        }
+        if (!IsOwner) return; // Empêcher les autres joueurs de contrôler votre personnage
 
-        // Récupère les directions de la caméra
+        if (controller.isGrounded && velocite.y < 0)
+            velocite.y = -2f;
+
         Vector3 camForward = cameraTransform.forward;
         Vector3 camRight = cameraTransform.right;
 
-        // On met le Y à 0 pour garder le mouvement strictement horizontal
         camForward.y = 0f;
         camRight.y = 0f;
         camForward.Normalize();
         camRight.Normalize();
 
-        // Déplacement basé sur l'angle de la caméra
         Vector3 move = camRight * moveInput.x + camForward * moveInput.y;
         controller.Move(move * vitesse * Time.deltaTime);
 
-        // Saut
         velocite.y += gravite * Time.deltaTime;
         controller.Move(velocite * Time.deltaTime);
     }
 
-    // Détecte les collisions lorsque le joueur touche la zone de mort
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        // Vérification pour la collision
         if (hit.gameObject.CompareTag("Mort"))
-        {
             Destroy(gameObject);
-        }
     }
 }

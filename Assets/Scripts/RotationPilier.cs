@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using Unity;
 using Unity.Netcode;
 
+[RequireComponent(typeof(Rigidbody))] // S'assure qu'un Rigidbody est présent
 public class RotationPilier : NetworkBehaviour
 {
     [Header("Vitesse et Accélération")]
@@ -16,20 +16,39 @@ public class RotationPilier : NetworkBehaviour
     public float delaiCooldown = 3f;
 
     private float sensRotation = 1f; // 1 = normal, -1 = inversé
+    private Rigidbody rb;
 
     void Start()
     {
-        // Accélère toutes les 10s
-        InvokeRepeating(nameof(Accelerer), intervalleAcceleration, intervalleAcceleration);
-
-        // Lance la gestion de l'inversion
-        StartCoroutine(GererInversionAleatoire());
+        rb = GetComponent<Rigidbody>();
+        
+        rb.isKinematic = true; 
+        rb.useGravity = false;
+        
+        // AJOUT CRUCIAL : Force le centre de masse exactement sur le pivot (0, 0, 0)
+        rb.centerOfMass = Vector3.zero; 
     }
 
-    void Update()
+    public override void OnNetworkSpawn()
     {
-        // Rotation selon la vitesse et le sens
-        transform.Rotate(0f, vitesse * sensRotation * Time.deltaTime, 0f, Space.Self);
+        base.OnNetworkSpawn();
+
+        // Seul le serveur doit calculer les changements de vitesse et les inversions aléatoires
+        if (IsServer)
+        {
+            InvokeRepeating(nameof(Accelerer), intervalleAcceleration, intervalleAcceleration);
+            StartCoroutine(GererInversionAleatoire());
+        }
+    }
+
+    void FixedUpdate()
+    {
+        // Seul le serveur déplace physiquement le pilier
+        if (!IsServer) return;
+
+        // On utilise MoveRotation dans FixedUpdate avec fixedDeltaTime pour la physique
+        Quaternion deltaRotation = Quaternion.Euler(0f, vitesse * sensRotation * Time.fixedDeltaTime, 0f);
+        rb.MoveRotation(rb.rotation * deltaRotation);
     }
 
     void Accelerer()
@@ -56,4 +75,3 @@ public class RotationPilier : NetworkBehaviour
         }
     }
 }
-    
