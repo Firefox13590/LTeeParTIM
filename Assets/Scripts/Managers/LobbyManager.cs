@@ -15,9 +15,6 @@ public class LobbyManager : NetworkBehaviour
     public Vector3[] spawnsJoueurs = new Vector3[4];
     public GameSettingsScriptableObject gameSettings;
 
-    //NetworkVariable<Player[]> sharedPlayerArray = new NetworkVariable<Player[]>();
-    //NetworkList<PlayerData> playerDatas = new NetworkList<PlayerData>();
-
     private void Awake()
     {
         if (Instance == null)
@@ -32,13 +29,6 @@ public class LobbyManager : NetworkBehaviour
 
         if (gameSettings == null) gameSettings = (GameSettingsScriptableObject)ScriptableObject.CreateInstance(nameof(GameSettingsScriptableObject));
         Debug.Log(gameSettings);
-    }
-    public override void OnNetworkSpawn()
-    {
-        if (IsHost)
-        {
-
-        }
     }
     private void OnEnable()
     {
@@ -79,6 +69,7 @@ public class LobbyManager : NetworkBehaviour
     void ManagePlayers(NetworkManager _, ConnectionEventData eventData)
     {
         if (!IsHost) return;
+        if (NetworkDataManager.Instance.playerDatas.Count == 0) NetworkDataManager.Instance.Init();
         Debug.Log("NetworkManager.OnConnectionEvent");
         //Debug.Log(eventData.EventType);
         if (eventData.EventType == ConnectionEvent.ClientConnected)
@@ -98,12 +89,24 @@ public class LobbyManager : NetworkBehaviour
             //    isPlayerObject: true,
             //    position: spawnsJoueurs[eventData.ClientId]);
 
-            ManagePlayers(false);
+            int targetPos = -1;
+            for (int i = 0; i < 4; i++)
+            {
+                if (NetworkDataManager.Instance.playerDatas[i] == PlayerData.Empty)
+                {
+                    targetPos = i;
+                    ManagePlayers(targetPos, false);
+                    break;
+                }
+            }
+            NetworkDataManager.Instance.DebugData();
+            DebugGameSettings();
         }
     }
-    public void ManagePlayers(bool isBot = true)
+    public void ManagePlayers(int playerPos, bool isBot = true)
     {
-        gameSettings.AddPlayer(isBot);
+        gameSettings.AddPlayer(playerPos, isBot);
+        NetworkDataManager.Instance.playerDatas[playerPos] = new PlayerData(0, 0);
 
         DebugGameSettings();
     }
@@ -111,6 +114,8 @@ public class LobbyManager : NetworkBehaviour
     {
         NetworkManager.DisconnectClient((ulong)playerPos);
         gameSettings.RemovePlayer(playerPos);
+
+        NetworkDataManager.Instance.playerDatas[playerPos] = PlayerData.Empty;
 
         DebugGameSettings();
     }

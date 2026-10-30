@@ -9,11 +9,19 @@ namespace Lib.Entities
         public int CurrentPos;
         public int Currency;
 
+        public static readonly PlayerData Empty = new PlayerData(-1, -1);
+
         public PlayerData(int currentPos, int currency)
         {
             CurrentPos = currentPos;
             Currency = currency;
         }
+        public override string ToString()
+        {
+            return $"{{ CurrentPos={CurrentPos} Currency={Currency} }}";
+        }
+
+
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer)
             where T : IReaderWriter
@@ -36,6 +44,14 @@ namespace Lib.Entities
         public override int GetHashCode()
         {
             return HashCode.Combine(CurrentPos, Currency);
+        }
+        public static bool operator ==(PlayerData left, PlayerData right)
+        {
+            return left.Equals(right);
+        }
+        public static bool operator !=(PlayerData left, PlayerData right)
+        {
+            return !(left == right);
         }
     }
 
@@ -76,12 +92,7 @@ namespace Lib.Entities
             set { currency = value; }
         }
 
-        private GameObject playerModel = null;
-        public GameObject PlayerModel
-        {
-            get { return playerModel; }
-            set { playerModel = value; }
-        }
+
 
         public Player() : base("Player") { }
         public Player(string name) : base(name) { }
@@ -93,7 +104,6 @@ namespace Lib.Entities
                    && Currency == other.Currency;
         }
         public override bool Equals(object obj) => Equals(obj as Player);
-
         public override int GetHashCode()
         {
             return HashCode.Combine(CurrentPos, Currency);

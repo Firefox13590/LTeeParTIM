@@ -5,6 +5,8 @@ using Lib;
 using TMPro;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
+using Unity.Netcode;
+using Lib.Entities;
 
 [DefaultExecutionOrder(0)]
 public class GameManager : MonoBehaviour
@@ -64,6 +66,14 @@ public class GameManager : MonoBehaviour
         HighlightPlayerStatsPanel();
 
         texteToursRestants.text = "Tours restants: " + turnsLeft;
+    }
+    private void OnEnable()
+    {
+        if (NetworkDataManager.Instance != null) NetworkDataManager.Instance.playerDatas.OnListChanged += UpdatePlayerData;
+    }
+    private void OnDisable()
+    {
+        if (NetworkDataManager.Instance != null) NetworkDataManager.Instance.playerDatas.OnListChanged -= UpdatePlayerData;
     }
 
     private void OnDestroy()
@@ -207,5 +217,12 @@ public class GameManager : MonoBehaviour
         //Debug.Log("score de " + gameSettings.Players[playerTurn].Name + ": " + score);
         Fin.scoreJoueurs[playerTurn] = gameSettings.Players[playerTurn].Currency;
         textCurrency.text = "x  " + gameSettings.Players[playerTurn].Currency;
+    }
+
+    void UpdatePlayerData(NetworkListEvent<PlayerData> listEvent)
+    {
+        //Debug.Log(listEvent);
+        gameSettings.Players[listEvent.Index].Currency = listEvent.Value.Currency;
+        gameSettings.Players[listEvent.Index].CurrentPos = listEvent.Value.CurrentPos;
     }
 }

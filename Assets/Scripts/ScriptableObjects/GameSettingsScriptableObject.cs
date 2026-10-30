@@ -16,7 +16,7 @@ public class GameSettingsScriptableObject : ScriptableObject
         }
     }
 
-    private int playerCount = 1;
+    private int playerCount = 0;
     private int botCount = 0;
 
     private int maxTurnCount = 10;
@@ -71,9 +71,29 @@ public class GameSettingsScriptableObject : ScriptableObject
             if (players[i] == null)
             {
                 players[i] = (isBot) ? new Bot($"Robot {players.Length + 1}") : new Player($"Joueur {players.Length + 1}");
-                break;
+                if (isBot) botCount++;
+                else playerCount++;
+
+                playerAdded = true;
             }
-            else if (players[i] is Bot && !isBot) players[i] = new Player($"Joueur {i + 1}");
+            else if (players[i] is Bot && !isBot)
+            {
+                players[i] = new Player($"Joueur {i + 1}");
+                playerCount++;
+
+                playerAdded = true;
+            }
+        }
+    }
+    public void AddPlayer(int pos, bool isBot = true)
+    {
+        if (players[pos] == null)
+        {
+            players[pos] = (isBot) ? new Bot($"Robot {pos + 1}") : new Player($"Joueur {pos + 1}");
+            Debug.Log(players[pos].Name + " has joined!");
+
+            if (isBot) botCount++;
+            else playerCount++;
         }
     }
 
@@ -81,6 +101,9 @@ public class GameSettingsScriptableObject : ScriptableObject
     {
         if (players[pos] != null)
         {
+            if (players[pos] is Bot) botCount--;
+            else playerCount--;
+
             Debug.Log(players[pos].Name + " has left...");
             players[pos] = null;
         }
