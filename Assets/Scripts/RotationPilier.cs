@@ -1,7 +1,9 @@
 using System.Collections;
 using UnityEngine;
+using Unity;
+using Unity.Netcode;
 
-public class RotationPilier : MonoBehaviour
+public class RotationPilier : NetworkBehaviour
 {
     [Header("Vitesse et Accélération")]
     public float vitesse = 90f;
@@ -54,3 +56,4 @@ public class RotationPilier : MonoBehaviour
         }
     }
 }
+    

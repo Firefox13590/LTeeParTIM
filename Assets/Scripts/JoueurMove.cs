@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity;
+using Unity.Netcode;
 
 [RequireComponent(typeof(CharacterController))]
-public class JoueurMove : MonoBehaviour
+public class JoueurMove : NetworkBehaviour
 {
     [Header("Paramètres de mouvement")]
     public float vitesse = 5f;
