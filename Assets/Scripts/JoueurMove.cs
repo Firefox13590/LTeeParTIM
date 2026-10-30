@@ -5,19 +5,19 @@ using UnityEngine.InputSystem;
 public class JoueurMove : MonoBehaviour
 {
     [Header("Paramètres de mouvement")]
-    public float speed = 5f;
-    public float jumpHeight = 1.5f;
-    public float gravity = -9.81f;
+    public float vitesse = 5f;
+    public float hauteurSaut = 1.5f;
+    public float gravite = -9.81f;
 
     private CharacterController controller;
     private Vector2 moveInput;
-    private Vector3 velocity;
+    private Vector3 velocite;
     private Transform cameraTransform;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        // Récupère automatiquement la caméra principale (doit avoir le tag "MainCamera")
+        // Récupère automatiquement la caméra principale
         cameraTransform = Camera.main.transform;
     }
 
@@ -30,15 +30,15 @@ public class JoueurMove : MonoBehaviour
     {
         if (value.isPressed && controller.isGrounded)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocite.y = Mathf.Sqrt(hauteurSaut * -2f * gravite);
         }
     }
 
     void Update()
     {
-        if (controller.isGrounded && velocity.y < 0)
+        if (controller.isGrounded && velocite.y < 0)
         {
-            velocity.y = -2f;
+            velocite.y = -2f;
         }
 
         // Récupère les directions de la caméra
@@ -53,10 +53,20 @@ public class JoueurMove : MonoBehaviour
 
         // Déplacement basé sur l'angle de la caméra
         Vector3 move = camRight * moveInput.x + camForward * moveInput.y;
-        controller.Move(move * speed * Time.deltaTime);
+        controller.Move(move * vitesse * Time.deltaTime);
 
-        // Gravité et saut
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        // Saut
+        velocite.y += gravite * Time.deltaTime;
+        controller.Move(velocite * Time.deltaTime);
+    }
+
+    // Détecte les collisions lorsque le joueur touche la zone de mort
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // Vérification pour la collision
+        if (hit.gameObject.CompareTag("Mort"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

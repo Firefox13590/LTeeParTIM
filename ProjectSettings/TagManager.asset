@@ -7,7 +7,7 @@ TagManager:
   - Carte
   - ConteneurControlesPlayer
   - Case
-  - Pilier
+  - Mort
   layers:
   - Default
   - TransparentFX
