@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Case : MonoBehaviour
+public class Case : NetworkBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public bool choixChemin = false, forceChemin = false;

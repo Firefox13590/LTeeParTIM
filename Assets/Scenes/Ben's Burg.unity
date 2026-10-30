@@ -922,6 +922,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 121817295211681604, guid: 6f7c02bfe73705847995cb27ace4323a, type: 3}
+      propertyPath: m_InScenePlacedDisabledByDefault
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 121817295211681604, guid: 6f7c02bfe73705847995cb27ace4323a, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 56714804
       objectReference: {fileID: 0}
@@ -2490,6 +2494,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9035810629900245276, guid: cb99b7ebf86a7cf47a0414202be4ab71, type: 3}
   m_PrefabInstance: {fileID: 328035444}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &353930237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 353930238}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &353930238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353930237}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: -0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &354701525
 GameObject:
   m_ObjectHideFlags: 0
@@ -9911,6 +9946,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1360395950}
   - component: {fileID: 1360395951}
+  - component: {fileID: 1360395952}
   m_Layer: 5
   m_Name: ListeCartes
   m_TagString: Untagged
@@ -9949,6 +9985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53332c5c4932c634d8bd416d2cee9e98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Lib.CardManager
+  ShowTopMostFoldoutHeaderGroup: 1
   matCartes:
   - {fileID: 2100000, guid: 8822857b06737584e98c29d394fea8b4, type: 2}
   - {fileID: 2100000, guid: ec8cd8e88fbc3b5498d66154e65eb54a, type: 2}
@@ -9962,6 +9999,33 @@ MonoBehaviour:
   playerControls: {fileID: 2010926726}
   listeCartes: []
   halfPoint: 0
+--- !u!114 &1360395952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360395949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 197043480
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  m_InScenePlacedDisabledByDefault: 1
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  m_InScenePlaced: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &1364198376
 GameObject:
   m_ObjectHideFlags: 0
@@ -10088,6 +10152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53332c5c4932c634d8bd416d2cee9e98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Lib.CardManager
+  ShowTopMostFoldoutHeaderGroup: 1
   matCartes:
   - {fileID: 2100000, guid: 8822857b06737584e98c29d394fea8b4, type: 2}
   - {fileID: 2100000, guid: ec8cd8e88fbc3b5498d66154e65eb54a, type: 2}
@@ -15541,9 +15606,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2010926725}
+  - component: {fileID: 2010926728}
   - component: {fileID: 2010926726}
   - component: {fileID: 2010926727}
-  - component: {fileID: 2010926728}
   m_Layer: 0
   m_Name: Players
   m_TagString: Untagged
@@ -15582,6 +15647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3824bca02537204439e91cdea8c95c6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  ShowTopMostFoldoutHeaderGroup: 1
   gameSettings: {fileID: 11400000, guid: 6bd18b2706f46d2479b685db9e8254ff, type: 2}
   playerObjects:
   - {fileID: 0}
@@ -15606,6 +15672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 533b255f4913eef4096078feccdb5a84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BotControls
+  ShowTopMostFoldoutHeaderGroup: 1
   cardManager: {fileID: 1360395951}
 --- !u!114 &2010926728
 MonoBehaviour:
@@ -17351,3 +17418,4 @@ SceneRoots:
   - {fileID: 476440037}
   - {fileID: 262620279}
   - {fileID: 1359352649}
+  - {fileID: 353930238}

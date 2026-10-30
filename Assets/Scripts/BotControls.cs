@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Unity.Netcode;
 
-public class BotControls : MonoBehaviour
+public class BotControls : NetworkBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public CardManager cardManager;

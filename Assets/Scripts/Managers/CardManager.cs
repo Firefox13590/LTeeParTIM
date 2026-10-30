@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 using UnityEngine.UI;
 using static Lib.ArrayMovement;
 using Random = UnityEngine.Random;
 
-public class CardManager : MonoBehaviour
+public class CardManager : NetworkBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public Material[] matCartes = new Material[8];
