@@ -3439,7 +3439,7 @@ MonoBehaviour:
   - {x: -3.02, y: 0.99, z: 1.27}
   - {x: -0.74, y: 0.1, z: -1.82}
   - {x: 2.98, y: 2, z: -4.2}
-  gameSettings: {fileID: 0}
+  gameSettings: {fileID: 11400000, guid: 6bd18b2706f46d2479b685db9e8254ff, type: 2}
 --- !u!4 &1164749205
 Transform:
   m_ObjectHideFlags: 0
