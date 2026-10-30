@@ -1,3 +1,4 @@
+using Lib.Entities;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,6 +15,9 @@ public class LobbyManager : NetworkBehaviour
     public Vector3[] spawnsJoueurs = new Vector3[4];
     public GameSettingsScriptableObject gameSettings;
 
+    //NetworkVariable<Player[]> sharedPlayerArray = new NetworkVariable<Player[]>();
+    //NetworkList<PlayerData> playerDatas = new NetworkList<PlayerData>();
+
     private void Awake()
     {
         if (Instance == null)
@@ -26,8 +30,15 @@ public class LobbyManager : NetworkBehaviour
             Destroy(this);
         }
 
-        gameSettings = (GameSettingsScriptableObject)ScriptableObject.CreateInstance(nameof(GameSettingsScriptableObject));
+        if (gameSettings == null) gameSettings = (GameSettingsScriptableObject)ScriptableObject.CreateInstance(nameof(GameSettingsScriptableObject));
         Debug.Log(gameSettings);
+    }
+    public override void OnNetworkSpawn()
+    {
+        if (IsHost)
+        {
+
+        }
     }
     private void OnEnable()
     {
@@ -81,6 +92,11 @@ public class LobbyManager : NetworkBehaviour
                 true,
                 true,
                 position: spawnsJoueurs[eventData.ClientId]);
+            //NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(
+            //    prefabsPlayer[eventData.ClientId].GetComponent<NetworkObject>(),
+            //    eventData.ClientId,
+            //    isPlayerObject: true,
+            //    position: spawnsJoueurs[eventData.ClientId]);
 
             ManagePlayers(false);
         }
@@ -88,12 +104,15 @@ public class LobbyManager : NetworkBehaviour
     public void ManagePlayers(bool isBot = true)
     {
         gameSettings.AddPlayer(isBot);
+
         DebugGameSettings();
     }
     public void ManagePlayers(int playerPos)
     {
         NetworkManager.DisconnectClient((ulong)playerPos);
         gameSettings.RemovePlayer(playerPos);
+
+        DebugGameSettings();
     }
 
 
@@ -107,8 +126,8 @@ public class LobbyManager : NetworkBehaviour
         //NetworkManager.Singleton.StartClient();
         RelayManager.instance.StartCoroutine(RelayManager.instance.ConfigureTransportAndStartNgoAsConnectingPlayer());
     }
-    public void LancerPartie()
+    public void LancerPartie(string nomScene)
     {
-        NetworkManager.SceneManager.LoadScene("Ben's Burg", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        NetworkManager.SceneManager.LoadScene(nomScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 }

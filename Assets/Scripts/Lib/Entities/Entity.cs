@@ -1,8 +1,46 @@
-using UnityEngine;
 using System;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace Lib.Entities
 {
+    public struct PlayerData : INetworkSerializable, IEquatable<PlayerData>
+    {
+        public int CurrentPos;
+        public int Currency;
+
+        public PlayerData(int currentPos, int currency)
+        {
+            CurrentPos = currentPos;
+            Currency = currency;
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer)
+            where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref CurrentPos);
+            serializer.SerializeValue(ref Currency);
+        }
+
+        public bool Equals(PlayerData other)
+        {
+            return CurrentPos == other.CurrentPos
+                && Currency == other.Currency;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is PlayerData other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CurrentPos, Currency);
+        }
+    }
+
+
+
     /// <summary>
     /// Représente une entité avec un nom et une position actuelle.
     /// </summary>
@@ -29,7 +67,7 @@ namespace Lib.Entities
     /// </summary>
     /// <remarks>Hérite de la classe <see cref="Entity"/>.</remarks>
     [Serializable]
-    public class Player : Entity
+    public class Player : Entity, IEquatable<Player>
     {
         private int currency = 0;
         public int Currency
@@ -47,6 +85,19 @@ namespace Lib.Entities
 
         public Player() : base("Player") { }
         public Player(string name) : base(name) { }
+
+        public bool Equals(Player other)
+        {
+            return other != null
+                   && CurrentPos == other.CurrentPos
+                   && Currency == other.Currency;
+        }
+        public override bool Equals(object obj) => Equals(obj as Player);
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CurrentPos, Currency);
+        }
     }
 
     /// <summary>
